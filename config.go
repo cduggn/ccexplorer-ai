@@ -5,28 +5,22 @@ const (
 	openAIModel   = "text-embedding-ada-002"
 )
 
-type Pinecone struct {
-	ProjectName string
-	IndexName   string
-	Environment string
-	Embedder    string
-	APIKey      string
-	NameSpace   string
+type Config struct {
+	PineconeProjectName string
+	PineconeIndexName   string
+	PineconeEnvironment string
+	PineconeEmbedder    string
+	PineconeAPIKey      string
+	PineconeNameSpace   string
+	OpenAIKey           string
 }
 
-type ClientConfig struct {
-	VectorStore Pinecone
-}
+func ClientConfig(opts ...Option) (*Config, error) {
 
-func DefaultClientConfig() ClientConfig {
-	return ClientConfig{
-		VectorStore: Pinecone{
-			ProjectName: "YOUR_PROJECT_NAME",
-			IndexName:   "YOUR_INDEX_NAME",
-			Environment: "",
-			Embedder:    "",
-			APIKey:      "",
-			NameSpace:   "",
-		},
+	o, err := applyOptions(opts...)
+	if err != nil {
+		return &Config{}, err
 	}
+
+	return o, nil
 }
