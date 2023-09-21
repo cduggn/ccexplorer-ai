@@ -10,6 +10,7 @@ import (
 
 type Client struct {
 	config Config
+	store  pinecone.Store
 }
 
 func NewClient(opts ...Option) (*Client, error) {
@@ -24,7 +25,7 @@ func NewClient(opts ...Option) (*Client, error) {
 
 }
 
-func (c *Client) LoadContext(ctx context.Context) {
+func (c *Client) LoadVectorStoreContext(ctx context.Context) {
 
 	// Create a new Pinecone vector store.
 	store, err := pinecone.New(
@@ -40,8 +41,19 @@ func (c *Client) LoadContext(ctx context.Context) {
 		log.Fatal(err)
 	}
 
-	// Search for similar documents using score threshold.
-	docs, err := store.SimilaritySearch(ctx, "only cities in south america", 10, vectorstores.WithScoreThreshold(0.80))
-	fmt.Println(docs)
+	c.store = store
+}
 
+func (c *Client) Search(ctx context.Context, q string) {
+	// Search for similar documents using score threshold.
+	docs, err := c.store.SimilaritySearch(ctx, "only cities in south america", 10, vectorstores.WithScoreThreshold(0.80))
+	if err != nil {
+		panic(err)
+	}
+	
+	if docs != nil {
+		fmt.Println(docs)
+	} else {
+		log.Println("No documents found")
+	}
 }

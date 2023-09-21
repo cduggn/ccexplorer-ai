@@ -16,7 +16,10 @@ func main() {
 		ccexplorer_ai.WithPineconeNameSpace("ccexplorer"),
 		ccexplorer_ai.WithOpenAIKey(""),
 	)
+	if err != nil {
+		panic(err)
+	}
 
-	client.LoadContext(context.Background())
+	client.LoadVectorStoreContext(context.Background())
 
 }
