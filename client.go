@@ -26,7 +26,6 @@ func NewClient(opts ...Option) (*Client, error) {
 }
 
 func (c *Client) LoadVectorStoreContext(ctx context.Context) {
-
 	// Create a new Pinecone vector store.
 	store, err := pinecone.New(
 		ctx,
@@ -50,7 +49,7 @@ func (c *Client) Search(ctx context.Context, q string) {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	if docs != nil {
 		fmt.Println(docs)
 	} else {

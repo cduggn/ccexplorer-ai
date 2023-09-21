@@ -22,4 +22,5 @@ func main() {
 
 	client.LoadVectorStoreContext(context.Background())
 
+	client.Search(context.Background(), "only cities in south america")
 }
