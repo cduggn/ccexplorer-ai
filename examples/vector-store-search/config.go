@@ -3,23 +3,42 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"log"
+	"strings"
 )
 
-func LoadConfig() {
-	viper.SetConfigName(".env")
+type Config struct {
+	PineconeProjectName string
+	PineconeIndexName   string
+	PineconeEnvironment string
+	PineconeEmbedder    string
+	PineconeAPIKey      string
+	PineconeNameSpace   string
+	OpenAIKey           string
+}
 
-	viper.AddConfigPath(".")
-
+func LoadConfig() Config {
 	viper.AutomaticEnv()
+	replacer := strings.NewReplacer(".", "_")
+	viper.SetEnvKeyReplacer(replacer)
 
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file, %s", err)
+	viper.SetConfigName("config.yaml")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
-	viper.SetDefault("VAR_NAME", "default_value")
+	cfg := Config{
+		PineconeProjectName: viper.GetString("PINECONE_PROJECT_NAME"),
+		PineconeIndexName:   viper.GetString("PINECONE_INDEX_NAME"),
+		PineconeEnvironment: viper.GetString("PINECONE_ENVIRONMENT"),
+		PineconeEmbedder:    viper.GetString("PINECONE_EMBEDDER"),
+		PineconeAPIKey:      viper.GetString("PINECONE_API_KEY"),
+		PineconeNameSpace:   viper.GetString("PINECONE_NAMESPACE"),
+		OpenAIKey:           viper.GetString("OPENAI_KEY"),
+	}
 
-	// Getting a string from .env file
-	loadedVar := viper.GetString("VAR_NAME")
-	fmt.Printf("Loaded variable from .env: %s\n", loadedVar)
+	return cfg
+
 }
