@@ -9,7 +9,6 @@ type Config struct {
 	PineconeProjectName string
 	PineconeIndexName   string
 	PineconeEnvironment string
-	PineconeEmbedder    string
 	PineconeAPIKey      string
 	PineconeNameSpace   string
 	OpenAIKey           string

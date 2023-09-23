@@ -17,7 +17,7 @@ type Config struct {
 
 func LoadConfig() Config {
 	viper.AutomaticEnv()
-	replacer := strings.NewReplacer(".", "_")
+	replacer := strings.NewReplacer("-", "_")
 	viper.SetEnvKeyReplacer(replacer)
 
 	viper.SetConfigName("config.yaml")
@@ -29,12 +29,12 @@ func LoadConfig() Config {
 	}
 
 	cfg := Config{
-		PineconeProjectName: viper.GetString("PINECONE_PROJECT_NAME"),
-		PineconeIndexName:   viper.GetString("PINECONE_INDEX_NAME"),
-		PineconeEnvironment: viper.GetString("PINECONE_ENVIRONMENT"),
-		PineconeAPIKey:      viper.GetString("PINECONE_API_KEY"),
-		PineconeNameSpace:   viper.GetString("PINECONE_NAMESPACE"),
-		OpenAIKey:           viper.GetString("OPENAI_KEY"),
+		PineconeProjectName: viper.GetString("pinecone.project-name"),
+		PineconeIndexName:   viper.GetString("pinecone.index-name"),
+		PineconeEnvironment: viper.GetString("pinecone.environment"),
+		PineconeAPIKey:      viper.GetString("pinecone.api-key"),
+		PineconeNameSpace:   viper.GetString("pinecone.namespace"),
+		OpenAIKey:           viper.GetString("openai.key"),
 	}
 
 	return cfg

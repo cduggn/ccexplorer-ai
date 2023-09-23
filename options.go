@@ -22,12 +22,6 @@ func WithPineconeEnvironment(env string) Option {
 	}
 }
 
-func WithPineconeEmbedder(embedder string) Option {
-	return func(p *Config) {
-		p.PineconeEmbedder = embedder
-	}
-}
-
 func WithPineconeAPIKey(apiKey string) Option {
 	return func(p *Config) {
 		p.PineconeAPIKey = apiKey
@@ -62,10 +56,6 @@ func applyOptions(opts ...Option) (*Config, error) {
 
 	if options.PineconeEnvironment == "" {
 		return nil, errors.New("pinecone environment is required")
-	}
-
-	if options.PineconeEmbedder == "" {
-		return nil, errors.New("pinecone embedder is required")
 	}
 
 	if options.PineconeAPIKey == "" {
