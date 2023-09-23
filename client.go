@@ -3,6 +3,7 @@ package ccexplorer_ai
 import (
 	"context"
 	"fmt"
+	embedings "github.com/tmc/langchaingo/embeddings/openai"
 	"github.com/tmc/langchaingo/vectorstores"
 	"github.com/tmc/langchaingo/vectorstores/pinecone"
 	"log"
@@ -26,13 +27,19 @@ func NewClient(opts ...Option) (*Client, error) {
 }
 
 func (c *Client) LoadVectorStoreContext(ctx context.Context) {
+
+	embedder, err := embedings.NewOpenAI()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Create a new Pinecone vector store.
 	store, err := pinecone.New(
 		ctx,
 		pinecone.WithProjectName(c.config.PineconeProjectName),
 		pinecone.WithIndexName(c.config.PineconeIndexName),
 		pinecone.WithEnvironment(c.config.PineconeEnvironment),
-		pinecone.WithEmbedder(nil),
+		pinecone.WithEmbedder(embedder),
 		pinecone.WithAPIKey(c.config.PineconeAPIKey),
 		pinecone.WithNameSpace(c.config.PineconeIndexName),
 	)
@@ -45,7 +52,7 @@ func (c *Client) LoadVectorStoreContext(ctx context.Context) {
 
 func (c *Client) Search(ctx context.Context, q string) {
 	// Search for similar documents using score threshold.
-	docs, err := c.store.SimilaritySearch(ctx, "only cities in south america", 10, vectorstores.WithScoreThreshold(0.80))
+	docs, err := c.store.SimilaritySearch(ctx, q, 10, vectorstores.WithScoreThreshold(0.80))
 	if err != nil {
 		panic(err)
 	}
