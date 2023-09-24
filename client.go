@@ -2,17 +2,17 @@ package ccexplorer_ai
 
 import (
 	"context"
-	"fmt"
 	embedings "github.com/tmc/langchaingo/embeddings/openai"
-	"github.com/tmc/langchaingo/llms/openai"
 	"github.com/tmc/langchaingo/vectorstores"
 	"github.com/tmc/langchaingo/vectorstores/pinecone"
-	"log"
+	"log/slog"
+	"os"
 )
 
 type Client struct {
 	config Config
 	store  pinecone.Store
+	logger *slog.Logger
 }
 
 func NewClient(opts ...Option) (*Client, error) {
@@ -23,20 +23,17 @@ func NewClient(opts ...Option) (*Client, error) {
 
 	return &Client{
 		config: *config,
+		logger: slog.New(slog.NewJSONHandler(os.Stdout, nil)),
 	}, nil
 
 }
 
 func (c *Client) LoadVectorStoreContext(ctx context.Context) {
-
-	openai.New()
-
 	embedder, err := embedings.NewOpenAI()
 	if err != nil {
-		log.Fatal(err)
+		c.logger.Error(err.Error())
 	}
 
-	// Create a new Pinecone vector store.
 	store, err := pinecone.New(
 		ctx,
 		pinecone.WithProjectName(c.config.PineconeProjectName),
@@ -47,22 +44,25 @@ func (c *Client) LoadVectorStoreContext(ctx context.Context) {
 		pinecone.WithNameSpace(c.config.PineconeIndexName),
 	)
 	if err != nil {
-		log.Fatal(err)
+		c.logger.Error(err.Error())
 	}
 
 	c.store = store
 }
 
 func (c *Client) Search(ctx context.Context, q string) {
+	if q == "" {
+		c.logger.Error("query is empty")
+	}
 	// Search for similar documents using score threshold.
 	docs, err := c.store.SimilaritySearch(ctx, q, 10, vectorstores.WithScoreThreshold(0.80))
 	if err != nil {
-		fmt.Println(err)
+		c.logger.Error(err.Error(), "query", q, "docs", docs)
 	}
 
 	if docs != nil {
-		fmt.Println(docs)
+		c.logger.Info("docs returned", "docs", docs)
 	} else {
-		log.Println("No documents found")
+		c.logger.Info("no docs returned")
 	}
 }
