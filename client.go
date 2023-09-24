@@ -27,7 +27,7 @@ func NewClient(opts ...Option) (*Client, error) {
 
 }
 
-func (c *Client) LoadVectorStoreContext(ctx context.Context) {
+func (c *Client) LoadVectorStoreContext(ctx context.Context, textKey string) {
 	embedder, err := embedings.NewOpenAI()
 	if err != nil {
 		c.logger.Error(err.Error())
@@ -41,6 +41,7 @@ func (c *Client) LoadVectorStoreContext(ctx context.Context) {
 		pinecone.WithEmbedder(embedder),
 		pinecone.WithAPIKey(c.config.PineconeAPIKey),
 		pinecone.WithNameSpace(c.config.PineconeNameSpace),
+		pinecone.WithTextKey(textKey),
 	)
 	if err != nil {
 		c.logger.Error(err.Error())

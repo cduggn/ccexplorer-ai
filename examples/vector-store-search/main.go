@@ -20,7 +20,7 @@ func main() {
 		panic(err)
 	}
 
-	client.LoadVectorStoreContext(context.Background())
+	client.LoadVectorStoreContext(context.Background(), "page_content")
 
 	client.Search(context.Background(), "return any match", 0)
 }
