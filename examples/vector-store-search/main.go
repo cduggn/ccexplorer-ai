@@ -12,7 +12,7 @@ func main() {
 	client, err := ccexplorer_ai.NewClient(
 		ccexplorer_ai.WiitPineconeProjectName(cfg.PineconeProjectName),
 		ccexplorer_ai.WithPineconeIndexName(cfg.PineconeIndexName),
-		ccexplorer_ai.WithPineconeEnvironment(cfg.PineconeIndexName),
+		ccexplorer_ai.WithPineconeEnvironment(cfg.PineconeEnvironment),
 		ccexplorer_ai.WithPineconeAPIKey(cfg.PineconeAPIKey),
 		ccexplorer_ai.WithPineconeNameSpace(cfg.PineconeNameSpace),
 		ccexplorer_ai.WithOpenAIKey(cfg.OpenAIKey),

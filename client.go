@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	embedings "github.com/tmc/langchaingo/embeddings/openai"
+	"github.com/tmc/langchaingo/llms/openai"
 	"github.com/tmc/langchaingo/vectorstores"
 	"github.com/tmc/langchaingo/vectorstores/pinecone"
 	"log"
@@ -27,6 +28,8 @@ func NewClient(opts ...Option) (*Client, error) {
 }
 
 func (c *Client) LoadVectorStoreContext(ctx context.Context) {
+
+	openai.New()
 
 	embedder, err := embedings.NewOpenAI()
 	if err != nil {
@@ -54,7 +57,7 @@ func (c *Client) Search(ctx context.Context, q string) {
 	// Search for similar documents using score threshold.
 	docs, err := c.store.SimilaritySearch(ctx, q, 10, vectorstores.WithScoreThreshold(0.80))
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
 	if docs != nil {

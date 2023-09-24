@@ -34,7 +34,7 @@ func LoadConfig() Config {
 		PineconeEnvironment: viper.GetString("pinecone.environment"),
 		PineconeAPIKey:      viper.GetString("pinecone.api-key"),
 		PineconeNameSpace:   viper.GetString("pinecone.namespace"),
-		OpenAIKey:           viper.GetString("openai.key"),
+		OpenAIKey:           viper.GetString("OPENAI_API_KEY"),
 	}
 
 	return cfg
