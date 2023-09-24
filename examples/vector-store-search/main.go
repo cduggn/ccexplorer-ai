@@ -14,7 +14,6 @@ func main() {
 		ccexplorer_ai.WithPineconeIndexName(cfg.PineconeIndexName),
 		ccexplorer_ai.WithPineconeEnvironment(cfg.PineconeEnvironment),
 		ccexplorer_ai.WithPineconeAPIKey(cfg.PineconeAPIKey),
-		ccexplorer_ai.WithPineconeNameSpace(cfg.PineconeNameSpace),
 		ccexplorer_ai.WithOpenAIKey(cfg.OpenAIKey),
 	)
 	if err != nil {
@@ -23,5 +22,5 @@ func main() {
 
 	client.LoadVectorStoreContext(context.Background())
 
-	client.Search(context.Background(), "only cities in south america")
+	client.Search(context.Background(), "return any match", 0)
 }

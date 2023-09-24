@@ -62,10 +62,6 @@ func applyOptions(opts ...Option) (*Config, error) {
 		return nil, errors.New("pinecone api key is required")
 	}
 
-	if options.PineconeNameSpace == "" {
-		return nil, errors.New("pinecone name space is required")
-	}
-
 	if options.OpenAIKey == "" {
 		return nil, errors.New("openai key is required")
 	}
