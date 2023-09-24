@@ -3,6 +3,7 @@ package ccexplorer_ai
 import (
 	"context"
 	embedings "github.com/tmc/langchaingo/embeddings/openai"
+	"github.com/tmc/langchaingo/vectorstores"
 	"github.com/tmc/langchaingo/vectorstores/pinecone"
 	"log/slog"
 	"os"
@@ -55,13 +56,15 @@ func (c *Client) Search(ctx context.Context, q string, scoreThreshold float64) {
 		c.logger.Error("query is empty")
 	}
 	// Search for similar documents using score threshold.
-	docs, err := c.store.SimilaritySearch(ctx, q, 100)
+	docs, err := c.store.SimilaritySearch(ctx, q, 100, vectorstores.WithScoreThreshold(scoreThreshold))
 	if err != nil {
 		c.logger.Error(err.Error(), "query", q, "docs", docs)
 	}
 
 	if docs != nil {
-		c.logger.Info("docs returned", "docs", docs)
+		for _, doc := range docs {
+			c.logger.Info("doc", "doc", doc.PageContent) //, "score", doc.Score)
+		}
 	} else {
 		c.logger.Info("no docs returned")
 	}

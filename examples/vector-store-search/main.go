@@ -22,5 +22,5 @@ func main() {
 
 	client.LoadVectorStoreContext(context.Background(), "page_content")
 
-	client.Search(context.Background(), "return any match", 0)
+	client.Search(context.Background(), "lambda costs in february", 0.75)
 }
