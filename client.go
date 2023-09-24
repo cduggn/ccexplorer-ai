@@ -28,7 +28,7 @@ func NewClient(opts ...Option) (*Client, error) {
 
 }
 
-func (c *Client) LoadVectorStoreContext(ctx context.Context) {
+func (c *Client) LoadVectorStoreContext(ctx context.Context, textKey string) {
 	embedder, err := embedings.NewOpenAI()
 	if err != nil {
 		c.logger.Error(err.Error())
@@ -41,7 +41,8 @@ func (c *Client) LoadVectorStoreContext(ctx context.Context) {
 		pinecone.WithEnvironment(c.config.PineconeEnvironment),
 		pinecone.WithEmbedder(embedder),
 		pinecone.WithAPIKey(c.config.PineconeAPIKey),
-		pinecone.WithNameSpace(c.config.PineconeIndexName),
+		pinecone.WithNameSpace(c.config.PineconeNameSpace),
+		pinecone.WithTextKey(textKey),
 	)
 	if err != nil {
 		c.logger.Error(err.Error())
@@ -50,18 +51,20 @@ func (c *Client) LoadVectorStoreContext(ctx context.Context) {
 	c.store = store
 }
 
-func (c *Client) Search(ctx context.Context, q string) {
+func (c *Client) Search(ctx context.Context, q string, scoreThreshold float64) {
 	if q == "" {
 		c.logger.Error("query is empty")
 	}
 	// Search for similar documents using score threshold.
-	docs, err := c.store.SimilaritySearch(ctx, q, 10, vectorstores.WithScoreThreshold(0.80))
+	docs, err := c.store.SimilaritySearch(ctx, q, 100, vectorstores.WithScoreThreshold(scoreThreshold))
 	if err != nil {
 		c.logger.Error(err.Error(), "query", q, "docs", docs)
 	}
 
 	if docs != nil {
-		c.logger.Info("docs returned", "docs", docs)
+		for _, doc := range docs {
+			c.logger.Info("doc", "doc", doc.PageContent) //, "score", doc.Score)
+		}
 	} else {
 		c.logger.Info("no docs returned")
 	}
