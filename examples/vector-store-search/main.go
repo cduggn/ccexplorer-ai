@@ -22,5 +22,21 @@ func main() {
 	client.LoadVectorStoreContext(context.Background(), "page_content")
 
 	var scoreThreshold float32 = 0.75
-	client.Search(context.Background(), "UnblendedCost for August 2023", 10, scoreThreshold)
+
+	filter := map[string]any{
+		"$and": []map[string]interface{}{
+			{
+				"year": map[string]interface{}{
+					"$eq": "2023-08-01",
+				},
+			},
+			{
+				"year": map[string]interface{}{
+					"$eq": "2023-08-01",
+				},
+			},
+		},
+	}
+
+	client.Search(context.Background(), "UnblendedCost 2023", 10, scoreThreshold, filter)
 }
