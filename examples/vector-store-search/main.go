@@ -2,19 +2,18 @@ package main
 
 import (
 	"context"
-	"github.com/cduggn/ccexplorerai"
+	ccexplorerai "github.com/cduggn/ccexplorerai"
 )
 
 func main() {
-
 	cfg := LoadConfig()
 
-	client, err := ccexplorer_ai.NewClient(
-		ccexplorer_ai.WiitPineconeProjectName(cfg.PineconeProjectName),
-		ccexplorer_ai.WithPineconeIndexName(cfg.PineconeIndexName),
-		ccexplorer_ai.WithPineconeEnvironment(cfg.PineconeEnvironment),
-		ccexplorer_ai.WithPineconeAPIKey(cfg.PineconeAPIKey),
-		ccexplorer_ai.WithOpenAIKey(cfg.OpenAIKey),
+	client, err := ccexplorerai.NewClient(
+		ccexplorerai.WiitPineconeProjectName(cfg.PineconeProjectName),
+		ccexplorerai.WithPineconeIndexName(cfg.PineconeIndexName),
+		ccexplorerai.WithPineconeEnvironment(cfg.PineconeEnvironment),
+		ccexplorerai.WithPineconeAPIKey(cfg.PineconeAPIKey),
+		ccexplorerai.WithOpenAIKey(cfg.OpenAIKey),
 	)
 	if err != nil {
 		panic(err)
@@ -22,5 +21,6 @@ func main() {
 
 	client.LoadVectorStoreContext(context.Background(), "page_content")
 
-	client.Search(context.Background(), "lambda costs in february", 0.75)
+	var scoreThreshold float32 = 0.75
+	client.Search(context.Background(), "UnblendedCost for August 2023", 10, scoreThreshold)
 }

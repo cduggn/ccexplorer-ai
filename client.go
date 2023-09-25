@@ -51,19 +51,19 @@ func (c *Client) LoadVectorStoreContext(ctx context.Context, textKey string) {
 	c.store = store
 }
 
-func (c *Client) Search(ctx context.Context, q string, scoreThreshold float64) {
-	if q == "" {
+func (c *Client) Search(ctx context.Context, query string, numDocuments int, scoreThreshold float32) {
+	if query == "" {
 		c.logger.Error("query is empty")
 	}
 	// Search for similar documents using score threshold.
-	docs, err := c.store.SimilaritySearch(ctx, q, 100, vectorstores.WithScoreThreshold(scoreThreshold))
+	docs, err := c.store.SimilaritySearch(ctx, query, numDocuments, vectorstores.WithScoreThreshold(scoreThreshold))
 	if err != nil {
-		c.logger.Error(err.Error(), "query", q, "docs", docs)
+		c.logger.Error(err.Error(), "query", query, "docs", docs)
 	}
 
 	if docs != nil {
 		for _, doc := range docs {
-			c.logger.Info("doc", "doc", doc.PageContent) //, "score", doc.Score)
+			c.logger.Info("doc", "doc", doc.PageContent)
 		}
 	} else {
 		c.logger.Info("no docs returned")
