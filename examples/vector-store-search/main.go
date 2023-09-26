@@ -26,17 +26,17 @@ func main() {
 	filter := map[string]any{
 		"$and": []map[string]interface{}{
 			{
-				"year": map[string]interface{}{
+				"start": map[string]interface{}{
 					"$eq": "2023-08-01",
 				},
 			},
 			{
-				"year": map[string]interface{}{
-					"$eq": "2023-08-01",
+				"end": map[string]interface{}{
+					"$eq": "2023-09-01",
 				},
 			},
 		},
 	}
 
-	client.Search(context.Background(), "UnblendedCost 2023", 10, scoreThreshold, filter)
+	client.Search(context.Background(), "AWS WAF metrics", 10, scoreThreshold, filter)
 }
