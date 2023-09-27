@@ -38,5 +38,5 @@ func main() {
 		},
 	}
 
-	client.Search(context.Background(), "AWS WAF metrics", 10, scoreThreshold, filter)
+	client.Search(context.Background(), "firewall costs", 10, scoreThreshold, filter)
 }
