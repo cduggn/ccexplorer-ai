@@ -23,7 +23,7 @@ jobs:
           WITH_V: false
           PRERELEASE: true
 
- goreleaser:
+  goreleaser:
    runs-on: ubuntu-latest
    steps:
      - name: Checkout
