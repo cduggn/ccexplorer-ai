@@ -1,5 +1,5 @@
 # ccexplorer-ai
-This is a repository that provides AI augmented search and discovery capabilities for AWS cost and usage data produced by the [`ccExplorer`](https://github.com/cduggn/ccExplorer) CLI . 
+This is a repository that provides AI augmented search and discovery capabilities for AWS cost and usage data surfaced through [`ccExplorer`](https://github.com/cduggn/ccExplorer) CLI . 
 
 ## Description
 `ccExplorer-ai` provides a simple interface to query cost explorer data stored in [Pinecone](https://www.pinecone.io/) using natural language queries. It relies on the [langchaingo](https://github.com/tmc/langchaingo) to load
