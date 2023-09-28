@@ -2,13 +2,10 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
 name: Tag Merge Commit
-
 on:
   pull_request:
-    types:
-      - closed
-    branches:
-      - master
+    types:  [closed]
+    branches: [main]
 
 jobs:
   build:
